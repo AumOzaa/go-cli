@@ -5,7 +5,11 @@ package cmd
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/AumOzaa/go-cli/my-cli/funcs"
+	"github.com/AumOzaa/go-cli/my-cli/internal/tools"
+	"github.com/AumOzaa/go-cli/my-cli/models"
 	"github.com/spf13/cobra"
 )
 
@@ -20,14 +24,50 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hello called")
-		fmt.Println("I can even call different functions from this file")
+		// title := args[0]
+		// funcs.ListTodos()
+	},
+}
+
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all todos",
+	Run: func(cmd *cobra.Command, args []string) {
+		// Call your function from the funcs package
+		todos := funcs.ListTodos()
+		fmt.Printf("%v\n", todos)
+	},
+}
+var addCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Make a new Todo",
+	Run: func(cmd *cobra.Command, args []string) {
+		// Call your function from the funcs package
+		fmt.Println("Is this even being called?")
+		id, err := strconv.Atoi(args[0])
+		title := args[1]
+		completed, err := strconv.Atoi(args[2])
+
+		if err != nil {
+			fmt.Printf("An unknown error occured %v\n", err)
+		}
+		var newTodo models.Todo
+		newTodo.Id = id
+		newTodo.Task = title
+		newTodo.Completed = completed
+
+		updatedTodo := append(tools.MockTodos, newTodo)
+		tools.MockTodos = updatedTodo
+
+		fmt.Printf("Exisiting todos now are :\n %v\n", updatedTodo)
 	},
 }
 
 func init() {
+	fmt.Println("Over here")
 	rootCmd.AddCommand(helloCmd)
-
+	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(addCmd)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

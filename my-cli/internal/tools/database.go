@@ -2,7 +2,7 @@ package tools
 
 import (
 	"fmt"
-	"github.com/AumOzaa/Go-Todo/models"
+	"github.com/AumOzaa/go-cli/my-cli/models"
 )
 
 type returnArticle struct {
