@@ -3,12 +3,11 @@ package tools
 import (
 	"context"
 	"fmt"
-	"log"
-	"os"
-
 	"github.com/AumOzaa/go-cli/my-cli/models"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
+	"log"
+	"os"
 )
 
 func IniDB() *pgx.Conn {

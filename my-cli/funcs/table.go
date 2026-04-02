@@ -16,7 +16,14 @@ func PrintTable() {
 	for i := 0; i < len(todos); i++ {
 		t.AppendRow(table.Row{todos[i].Id, todos[i].Task, todos[i].Completed})
 	}
+	t.SetColumnConfigs([]table.ColumnConfig{
+		{
+			WidthMin: 90,
+		},
+	})
 	t.AppendSeparator()
+	t.SetAllowedRowLength(90)
+	t.SetStyle(table.StyleColoredBright)
 	t.Render()
 }
 
