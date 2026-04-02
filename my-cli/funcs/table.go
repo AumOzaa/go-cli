@@ -24,3 +24,8 @@ func InsertTodo(task string, completed int) {
 	conn := tools.IniDB()
 	tools.InsertValues(conn, task, completed)
 }
+
+func DeleteATodo(id int) {
+	conn := tools.IniDB()
+	tools.DeleteTask(conn, id)
+}

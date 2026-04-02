@@ -64,5 +64,18 @@ func InsertValues(conn *pgx.Conn, task string, completed int) {
 	}
 
 	fmt.Println("Task added successfully")
-	fmt.Printf("%v", result)
+	fmt.Printf("%v\n", result)
+}
+
+func DeleteTask(conn *pgx.Conn, id int) {
+	result, err := conn.Exec(
+		context.Background(),
+		"DELETE FROM tasklist WHERE id = ($1)", id)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%v\n", result)
 }

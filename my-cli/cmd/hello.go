@@ -36,6 +36,20 @@ var listCmd = &cobra.Command{
 		funcs.PrintTable()
 	},
 }
+
+var completed = &cobra.Command{
+	Use:   "completed",
+	Short: "List all todos",
+	Run: func(cmd *cobra.Command, args []string) {
+		id, err := strconv.Atoi(args[0])
+
+		if err != nil {
+			fmt.Printf("An unknown error occured %v\n", err)
+		}
+		funcs.DeleteATodo(id)
+	},
+}
+
 var addCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Make a new Todo",
@@ -54,10 +68,10 @@ var addCmd = &cobra.Command{
 }
 
 func init() {
-	// fmt.Println("Over here")
 	rootCmd.AddCommand(helloCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(addCmd)
+	rootCmd.AddCommand(completed)
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
