@@ -1,13 +1,13 @@
 package funcs
 
 import (
-	"fmt"
+	// "fmt"
 
 	"github.com/AumOzaa/go-cli/my-cli/internal/tools"
 	"github.com/AumOzaa/go-cli/my-cli/models"
 )
 
 func ListTodos() []models.Todo {
-	fmt.Printf("Exisiting todos :\n %v\n", tools.MockTodos)
+	// fmt.Printf("Exisiting todos :\n %v\n", tools.MockTodos)
 	return tools.MockTodos
 }
