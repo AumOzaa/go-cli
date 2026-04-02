@@ -3,13 +3,20 @@ package tools
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 )
 
 func IniDB() {
-	// urlExample := "postgres://username:password@localhost:5432/database_name"
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	fmt.Printf("URL : %v\n", os.Getenv("DATABASE_URL"))
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
@@ -17,13 +24,15 @@ func IniDB() {
 	}
 	defer conn.Close(context.Background())
 
-	var name string
-	var weight int64
-	err = conn.QueryRow(context.Background(), "select name, weight from widgets where id=$1", 42).Scan(&name, &weight)
+	var id int
+	var task string
+	var completed int
+	rows, err := conn.Query(context.Background(), "SELECT * from taskList")
+	fmt.Printf("Rows : \n %v", rows)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println(name, weight)
+	fmt.Println(id, task, completed)
 }

@@ -25,7 +25,9 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Calling the table functinon
-		funcs.PrintTable()
+		// funcs.PrintTable()
+		fmt.Println("Before printing db")
+		tools.IniDB()
 		// title := args[0]
 		// funcs.ListTodos()
 	},
