@@ -6,33 +6,63 @@ import (
 	"log"
 	"os"
 
+	"github.com/AumOzaa/go-cli/my-cli/models"
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 )
 
-func IniDB() {
+func IniDB() *pgx.Conn {
 	err := godotenv.Load()
 
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	fmt.Printf("URL : %v\n", os.Getenv("DATABASE_URL"))
 	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
-	defer conn.Close(context.Background())
 
-	var id int
-	var task string
-	var completed int
-	rows, err := conn.Query(context.Background(), "SELECT * from taskList")
-	fmt.Printf("Rows : \n %v", rows)
+	return conn
+}
+
+func ListTodoss(conn *pgx.Conn) []models.Todo {
+	var todos []models.Todo
+	var todo models.Todo
+
+	rows, err := conn.Query(context.Background(), "SELECT * FROM tasklist")
+
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
+		fmt.Println(err)
+		return nil
 	}
 
-	fmt.Println(id, task, completed)
+	defer rows.Close()
+
+	for rows.Next() {
+
+		err := rows.Scan(&todo.Id, &todo.Task, &todo.Completed)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+
+		todos = append(todos, todo)
+	}
+	return todos
+}
+
+func InsertValues(conn *pgx.Conn, task string, completed int) {
+	result, err := conn.Exec(
+		context.Background(),
+		"INSERT INTO tasklist (task,completed) VALUES ($1,$2)", task, completed)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("Task added successfully")
+	fmt.Printf("%v", result)
 }

@@ -8,8 +8,6 @@ import (
 	"strconv"
 
 	"github.com/AumOzaa/go-cli/my-cli/funcs"
-	"github.com/AumOzaa/go-cli/my-cli/internal/tools"
-	"github.com/AumOzaa/go-cli/my-cli/models"
 	"github.com/spf13/cobra"
 )
 
@@ -25,9 +23,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Calling the table functinon
-		// funcs.PrintTable()
-		fmt.Println("Before printing db")
-		tools.IniDB()
+		funcs.PrintTable()
 		// title := args[0]
 		// funcs.ListTodos()
 	},
@@ -37,13 +33,7 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all todos",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Call your function from the funcs package
-		todos := funcs.ListTodos()
-		fmt.Println("Exisiting todos")
-		for i := 0; i < len(todos); i++ {
-			fmt.Printf("%v\n", todos[i])
-		}
-		// fmt.Printf("%v\n", todos)
+		funcs.PrintTable()
 	},
 }
 var addCmd = &cobra.Command{
@@ -51,23 +41,15 @@ var addCmd = &cobra.Command{
 	Short: "Make a new Todo",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Call your function from the funcs package
-		fmt.Println("Is this even being called?")
-		id, err := strconv.Atoi(args[0])
-		title := args[1]
-		completed, err := strconv.Atoi(args[2])
+		// fmt.Println("Is this even being called?")
+		title := args[0]
+		completed, err := strconv.Atoi(args[1])
 
 		if err != nil {
 			fmt.Printf("An unknown error occured %v\n", err)
 		}
-		var newTodo models.Todo
-		newTodo.Id = id
-		newTodo.Task = title
-		newTodo.Completed = completed
 
-		updatedTodo := append(tools.MockTodos, newTodo)
-		tools.MockTodos = updatedTodo
-
-		fmt.Printf("Exisiting todos now are :\n %v\n", updatedTodo)
+		funcs.InsertTodo(title, completed)
 	},
 }
 
